@@ -27,6 +27,7 @@ class MinMaxProperty:
 		for row in reader:
 			if row['property'] == self.name:
 				self.order = int(row['order'])
+		self.results = self.__getResultsDict__()
 
 	def __getValue(self, tbl):
 		if self.name == "min":
@@ -35,3 +36,12 @@ class MinMaxProperty:
 			appendix = " D"
 		value = unicode(arcpy.SearchCursor(tbl, "", "", self.fieldName, self.fieldName + appendix).next().getValue(self.fieldName))
 		return value
+	
+	def __getResultsDict__(self):
+		d = {'name': self.name,
+			'alias': self.alias,
+			'oldValue': self.oldValue,
+			'newValue': self.newValue,
+			'different': self.different
+			}
+		return d

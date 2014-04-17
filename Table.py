@@ -10,27 +10,38 @@ import Property
 class Table:
 	def __init__(self, table1, table2, tableProperties, fieldProperties, spatrefProperties, minMaxFields,compareValueFields):
 		self.fields = []
+		self.fieldsAsDict = []
 		self.tblProperties = []
+		self.tblPropertiesAsDict = []
 		self.sprefProperties = []
+		self.sprefPropertiesAsDict = []
 		self.tableProperties = tableProperties
 		self.spatrefProperties = spatrefProperties
 		fieldNameList1 = self.__getFieldNameList(table1)
 		fieldNameList2 = self.__getFieldNameList(table2)
 		mergedFieldNames = self.__mergeFieldNameLists(fieldNameList1,fieldNameList2)
 
+		# Felder
 		for f in mergedFieldNames:
 			arcpy.AddMessage("Bearbeite Feld: " + f)
 			fo = Field.Field(table1,table2,f,fieldProperties,minMaxFields,compareValueFields)
 			self.fields.append(fo)
+			self.fieldsAsDict.append(fo.results)
+			
+		# Tabellen-Eigenschaften
 		arcpy.AddMessage("Bearbeite Tabellen-Eigenschaften")
 		for k,v in self.tableProperties.items():
 			po = Property.Property(arcpy.Describe(table1),arcpy.Describe(table2),k,v)
 			self.tblProperties.append(po)
+			self.tblPropertiesAsDict.append(po.results)
+			
+		# SpatialReference-Eigenschaften
 		arcpy.AddMessage("Bearbeite Spatial Reference-Eigenschaften")
 		for k,v in self.spatrefProperties.items():
 			if hasattr(arcpy.Describe(table1),"spatialReference") & hasattr(arcpy.Describe(table2),"spatialReference"):
 				po = Property.Property(arcpy.Describe(table1).spatialReference,arcpy.Describe(table2).spatialReference,k,v)
 				self.sprefProperties.append(po)
+				self.sprefPropertiesAsDict.append(po.results)
 
 		self.tablePropertiesHTML = self.__getTablePropertiesHTML()
 		self.spatrefPropertiesHTML = self.__getSpatrefPropertiesHTML()

@@ -12,6 +12,7 @@ import operator
 class Field:
 	def __init__(self, table1, table2, fieldName, fieldProps, minMaxFields, compareValueFields):
 		self.properties = []
+		self.propertiesAsDict = []
 		self.name = fieldName
 		self.table1 = table1
 		self.table2 = table2
@@ -28,9 +29,16 @@ class Field:
 			else:
 				p = Property.Property(fieldObj1,fieldObj2,pn,an)
 			self.properties.append(p)
+			self.propertiesAsDict.append(p.results)
 		
 		self.html = self.__createHTMLTableRow()
-		
+		self.results = self.__getResultsDict__()
+
+	def __getResultsDict__(self):
+		d = {'name': self.name,
+			'properties': self.propertiesAsDict
+			}
+		return d		
 		
 	def __createHTMLTableRow(self):
 		html = u""

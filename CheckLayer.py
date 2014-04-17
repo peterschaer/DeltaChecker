@@ -55,8 +55,6 @@ try:
 	outputDir = arcpy.GetParameterAsText(2)
 	filename = str(uuid.uuid4()) + ".html"
 	outputFile = os.path.join(outputDir, filename)
-	#~ Der generierte Output-Filename wird als Output-Parameter zurueckgegeben
-	arcpy.SetParameterAsText(8,outputFile)
 
 	#~ outFile = open(outputFile,"w")
 	outFile = codecs.open(outputFile,"w","iso-8859-1")
@@ -113,6 +111,17 @@ try:
 
 	outFile.write(geruest.replace('<div id="dcContent"/>',content))
 	outFile.close()
+
+	# Alle Output-Parameter ausgeben	
+	# Der generierte Output-Filename wird als Output-Parameter zurueckgegeben
+	arcpy.SetParameterAsText(8,outputFile)
+	DeltaStatus = True
+	arcpy.SetParameter(9,DeltaStatus)
+	resDict = {'sprefProps': t.sprefPropertiesAsDict,
+			'tblProps': t.tblPropertiesAsDict,
+			'fields': t.fieldsAsDict}
+	arcpy.SetParameter(10,resDict)
+
 
 except Exception as e:
 	arcpy.AddError(e.message)
