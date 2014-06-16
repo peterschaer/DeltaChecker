@@ -4,6 +4,7 @@ import xml.dom.minidom
 import codecs
 import traceback
 import os
+import sys
 
 try:
 	def FeatureClassListToDict(fcList):
@@ -37,10 +38,13 @@ try:
 	outputFileName = os.path.join(outputDir, gprName + ".html")
 	content = u""
 	
+	toolbox = os.path.join(sys.path[0], "DeltaChecker.tbx")
+	arcpy.AddMessage("Toolbox: " + toolbox)
+	
 	#~ Zu vergleichende FeatureClasses vergleichen
 	for key in sorted(compareNames):
 		#~ Nur wenn ImportToolbox und RemoveToolbox in der Schlaufe sind, läuft das Script auf TS!
-		arcpy.ImportToolbox(r"K:\Anwend\Tools\ArcGIS10\DeltaChecker\DeltaChecker.tbx")
+		arcpy.ImportToolbox(toolbox)
 		
 		arcpy.AddMessage("Vergleiche: " + oldTableDict[key] + " vs. " + newTableDict[key]) 
 		result = arcpy.CheckLayer_deltachecker(oldTableDict[key], newTableDict[key], outputDir)
@@ -52,13 +56,13 @@ try:
 
 		del DOM, result
 		#~ Nur wenn ImportToolbox und RemoveToolbox in der Schlaufe sind, läuft das Script auf TS!
-		arcpy.RemoveToolbox(r"K:\Anwend\Tools\ArcGIS10\DeltaChecker\DeltaChecker.tbx")
+		arcpy.RemoveToolbox(toolbox)
 		os.remove(outputFile)
 	
 	#~ neue FeatureClasses vergleichen
 	for key in sorted(addedNames):
 		#~ Nur wenn ImportToolbox und RemoveToolbox in der Schlaufe sind, laeuft das Script auf TS!
-		arcpy.ImportToolbox(r"K:\Anwend\Tools\ArcGIS10\DeltaChecker\DeltaChecker.tbx")
+		arcpy.ImportToolbox(toolbox)
 		
 		arcpy.AddWarning("Eine Ebene ist hinzugekommen: " + newTableDict[key])
 		#~ arcpy.AddMessage("Vergleiche: " + newTableDict[key] + " vs. " + newTableDict[key]) 
@@ -72,13 +76,13 @@ try:
 		
 		del DOM, result
 		#~ Nur wenn ImportToolbox und RemoveToolbox in der Schlaufe sind, läuft das Script auf TS!
-		arcpy.RemoveToolbox(r"K:\Anwend\Tools\ArcGIS10\DeltaChecker\DeltaChecker.tbx")
+		arcpy.RemoveToolbox(toolbox)
 		os.remove(outputFile)
 
 	#~ gelöschte FeatureClasses vergleichen
 	for key in sorted(removedNames):
 		#~ Nur wenn ImportToolbox und RemoveToolbox in der Schlaufe sind, läuft das Script auf TS!
-		arcpy.ImportToolbox(r"K:\Anwend\Tools\ArcGIS10\DeltaChecker\DeltaChecker.tbx")
+		arcpy.ImportToolbox(toolbox)
 		
 		arcpy.AddWarning("Eine Ebene ist verschwunden: " + oldTableDict[key])
 		#~ arcpy.AddMessage("Vergleiche: " + oldTableDict[key] + " vs. " + oldTableDict[key]) 
@@ -92,7 +96,7 @@ try:
 		
 		del DOM, result
 		#~ Nur wenn ImportToolbox und RemoveToolbox in der Schlaufe sind, laeuft das Script auf TS!
-		arcpy.RemoveToolbox(r"K:\Anwend\Tools\ArcGIS10\DeltaChecker\DeltaChecker.tbx")
+		arcpy.RemoveToolbox(toolbox)
 		os.remove(outputFile)
 	
 	geruestFilePath = os.path.join(scriptHome,"geruest_utf8.txt")
