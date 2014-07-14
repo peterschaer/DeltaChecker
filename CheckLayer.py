@@ -1,4 +1,4 @@
-# -*- coding: cp1252 -*-
+# -*- coding: utf-8 -*-
 try:
 	arcpy
 except NameError:
@@ -39,13 +39,13 @@ try:
 	tableProperties = processParameter(arcpy.GetParameterAsText(4))
 	spatrefProperties = processParameter(arcpy.GetParameterAsText(5))
 
-	#~ Felder für die die Minimum- und Maximum-Werte verglichen werden
+	#~ Felder fÃ¼r die die Minimum- und Maximum-Werte verglichen werden
 	minMaxFields = arcpy.GetParameterAsText(6)
 	if len(minMaxFields) > 0:
 		fieldProperties["min"] ="Minimum"
 		fieldProperties["max"] ="Maximum"
 
-	#~ Felder für die die Werte miteinander verglichen werden
+	#~ Felder fÃ¼r die die Werte miteinander verglichen werden
 	compareValueFields = arcpy.GetParameterAsText(7)
 	if len(compareValueFields) > 0:
 		fieldProperties["values"] = "Werte"
@@ -57,13 +57,13 @@ try:
 	outputFile = os.path.join(outputDir, filename)
 
 	#~ outFile = open(outputFile,"w")
-	outFile = codecs.open(outputFile,"w","iso-8859-1")
+	outFile = codecs.open(outputFile,"w","utf-8")
 
 	t = Table.Table(oldTable, newTable, tableProperties, fieldProperties, spatrefProperties, minMaxFields, compareValueFields)
 
-	geruestFilePath = os.path.join(scriptHome,"geruest.txt")
+	geruestFilePath = os.path.join(scriptHome,"geruest_utf8.txt")
 	#~ geruestFile = open(geruestFilePath,"r")
-	geruestFile = codecs.open(geruestFilePath,"r","iso-8859-1")
+	geruestFile = codecs.open(geruestFilePath,"r","utf-8")
 	geruest = geruestFile.read()
 	geruestFile.close()
 

@@ -1,4 +1,4 @@
-# -*- coding: cp1252 -*-
+# -*- coding: utf-8 -*-
 import arcpy
 import xml.dom.minidom
 import codecs
@@ -75,7 +75,7 @@ try:
 		arcpy.RemoveToolbox(r"K:\Anwend\Tools\ArcGIS10\DeltaChecker\DeltaChecker.tbx")
 		os.remove(outputFile)
 
-	#~ gelöschte FeatureClasses vergleichen
+	#~ gelÃ¶schte FeatureClasses vergleichen
 	for key in sorted(removedNames):
 		#~ Nur wenn ImportToolbox und RemoveToolbox in der Schlaufe sind, laeuft das Script auf TS!
 		arcpy.ImportToolbox(r"K:\Anwend\Tools\ArcGIS10\DeltaChecker\DeltaChecker.tbx")
@@ -95,14 +95,14 @@ try:
 		arcpy.RemoveToolbox(r"K:\Anwend\Tools\ArcGIS10\DeltaChecker\DeltaChecker.tbx")
 		os.remove(outputFile)
 	
-	geruestFilePath = os.path.join(scriptHome,"geruest.txt")
+	geruestFilePath = os.path.join(scriptHome,"geruest_utf8.txt")
 	#~ geruestFile = open(geruestFilePath,"r")
-	geruestFile = codecs.open(geruestFilePath,"r","iso-8859-1")
+	geruestFile = codecs.open(geruestFilePath,"r","utf-8")
 	geruest = geruestFile.read()
 	geruestFile.close()
 
 	#~ outputFile = open(outputFileName,"w")
-	outputFile = codecs.open(outputFileName,"w","iso-8859-1")
+	outputFile = codecs.open(outputFileName,"w","utf-8")
 	outputFile.write(geruest.replace('<div id="dcContent"/>',content))
 	outputFile.close()
 	
