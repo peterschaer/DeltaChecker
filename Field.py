@@ -16,6 +16,7 @@ class Field:
 		self.name = fieldName
 		self.table1 = table1
 		self.table2 = table2
+# 		TODO: Der status ist nicht nur abhängig davon, ob es ein neues oder gelöschtes Feld ist, sondern auch ob sich irgendeine Eigenschaft des Feldes geändert hat
 		self.status = self.__determineStatus()
 		fieldObj1 = self.__getFieldObject(table1)
 		fieldObj2 = self.__getFieldObject(table2)
@@ -50,7 +51,7 @@ class Field:
 			html = "<tr><td><span class=\"changed\">" + self.name + "</span></td>"
 		for p in sorted(self.properties, key=operator.attrgetter('order')):
 			if self.status == "stable":
-				if p.different == True:
+				if p.hasDelta == True:
 					html = html + "<td><span class=\"changed\">" + unicode(p.newValue) + "</span> (<span class=\"old\">" + unicode(p.oldValue) + "</span>)</td>"
 				else:
 					if p.newValue == None:

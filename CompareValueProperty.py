@@ -23,11 +23,11 @@ class CompareValueProperty:
 		self.oldValue = " ".join(oldList)
 		self.newValue = " ".join(newList)
 		
-		self.different = None
+		self.hasDelta = None
 		if len(oldList) == 0 and len(newList) == 0:
-			self.different = False
+			self.hasDelta = False
 		else:
-			self.different = True
+			self.hasDelta = True
 
 		reader = csv.DictReader(open(r"\\geodb.infra.be.ch\freigabe\Anwendungen\DeltaChecker\v10.0.0\fieldProperties.csv"),delimiter=",")
 		for row in reader:
@@ -49,6 +49,6 @@ class CompareValueProperty:
 			'alias': self.alias,
 			'oldValue': self.oldValue,
 			'newValue': self.newValue,
-			'different': self.different
+			'hasDelta': self.hasDelta
 			}
 		return d

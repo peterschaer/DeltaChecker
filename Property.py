@@ -12,7 +12,7 @@ class Property:
 		self.alias = propAlias
 		self.oldValue = None
 		self.newValue = None
-		self.different = None
+		self.hasDelta = None
 		self.order = None
 		
 		if oldObject != None:
@@ -24,9 +24,9 @@ class Property:
 				self.newValue = getattr(newObject,self.name)
 				
 		if self.oldValue == self.newValue:
-			self.different = False
+			self.hasDelta = False
 		else:
-			self.different = True
+			self.hasDelta = True
 
 		reader = csv.DictReader(open(r"\\geodb.infra.be.ch\freigabe\Anwendungen\DeltaChecker\v10.0.0\fieldProperties.csv"),delimiter=",")
 		for row in reader:
@@ -39,6 +39,6 @@ class Property:
 			'alias': self.alias,
 			'oldValue': self.oldValue,
 			'newValue': self.newValue,
-			'different': self.different
+			'hasDelta': self.hasDelta
 			}
 		return d

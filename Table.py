@@ -20,6 +20,7 @@ class Table:
 		fieldNameList1 = self.__getFieldNameList(table1)
 		fieldNameList2 = self.__getFieldNameList(table2)
 		mergedFieldNames = self.__mergeFieldNameLists(fieldNameList1,fieldNameList2)
+		self.hasDelta = None
 
 		# Felder
 		for f in mergedFieldNames:
@@ -54,7 +55,7 @@ class Table:
 		for k,v in self.tableProperties.items():
 			for p in self.tblProperties:
 				if p.name == k:
-					if p.different == True:
+					if p.hasDelta == True:
 						html = html + "<td><span class=\"changed\">" + unicode(p.newValue) + "</span> <span class=\"old\">(" + unicode(p.oldValue) + "</span>)</td>" 
 					else:
 						html = html + "<td>" + unicode(p.newValue) + "</td>" 
@@ -69,7 +70,7 @@ class Table:
 		for k,v in self.spatrefProperties.items():
 			for p in self.sprefProperties:
 				if p.name == k:
-					if p.different == True:
+					if p.hasDelta == True:
 						html = html + "<td><span class=\"changed\">" + unicode(p.newValue) + "</span> <span class=\"old\">(" + unicode(p.oldValue) + "</span>)</td>" 
 					else:
 						html = html + "<td>" + unicode(p.newValue) + "</td>" 
