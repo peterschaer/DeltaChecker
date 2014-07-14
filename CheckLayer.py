@@ -12,6 +12,7 @@ import xml.dom.minidom
 import codecs
 import traceback
 import operator
+import json
 
 def processParameter(paramString):
 	propList = {}
@@ -120,7 +121,7 @@ try:
 	resDict = {'sprefProps': t.sprefPropertiesAsDict,
 			'tblProps': t.tblPropertiesAsDict,
 			'fields': t.fieldsAsDict}
-	arcpy.SetParameter(10,resDict)
+	arcpy.SetParameter(10,json.dumps(resDict))
 
 
 except Exception as e:

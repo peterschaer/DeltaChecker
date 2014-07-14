@@ -29,7 +29,7 @@ try:
 	newTableDict = FeatureClassListToDict(newTableList)
 	newSet = set(newTableDict.keys())
 
-	#~ zu vergleichende, geloeschte und neue Ebenen ermitteln
+	# ~ zu vergleichende, geloeschte und neue Ebenen ermitteln
 	compareNames = list(newSet & oldSet)
 	removedNames = list(oldSet - newSet)
 	addedNames = list(newSet - oldSet)
@@ -37,11 +37,12 @@ try:
 	outputFileName = os.path.join(outputDir, gprName + ".html")
 	content = u""
 	
-	#~ Zu vergleichende FeatureClasses vergleichen
+	# ~ Zu vergleichende FeatureClasses vergleichen
 	for key in sorted(compareNames):
-		#~ Nur wenn ImportToolbox und RemoveToolbox in der Schlaufe sind, laeuft das Script auf TS!
+		# ~ Nur wenn ImportToolbox und RemoveToolbox in der Schlaufe sind, laeuft das Script auf TS!
 		arcpy.ImportToolbox(r"K:\Anwend\Tools\ArcGIS10\DeltaChecker\DeltaChecker.tbx")
 		
+# 		TODO: In den INFO-Tabellen nach legenden- und systemrelevanten Attributen suchen. Diese werden entweder  als CompareValueField oder als MinMaxField übergeben
 		arcpy.AddMessage("Vergleiche: " + oldTableDict[key] + " vs. " + newTableDict[key]) 
 		result = arcpy.CheckLayer_deltachecker(oldTableDict[key], newTableDict[key], outputDir)
 		arcpy.AddMessage(result.getOutput(0))
@@ -51,59 +52,59 @@ try:
 		content = content + DOM.getElementsByTagName("div")[1].toxml() + "<hr/>"
 
 		del DOM, result
-		#~ Nur wenn ImportToolbox und RemoveToolbox in der Schlaufe sind, laeuft das Script auf TS!
+		# ~ Nur wenn ImportToolbox und RemoveToolbox in der Schlaufe sind, laeuft das Script auf TS!
 		arcpy.RemoveToolbox(r"K:\Anwend\Tools\ArcGIS10\DeltaChecker\DeltaChecker.tbx")
 		os.remove(outputFile)
 	
-	#~ neue FeatureClasses vergleichen
+	# ~ neue FeatureClasses vergleichen
 	for key in sorted(addedNames):
-		#~ Nur wenn ImportToolbox und RemoveToolbox in der Schlaufe sind, laeuft das Script auf TS!
+		# ~ Nur wenn ImportToolbox und RemoveToolbox in der Schlaufe sind, laeuft das Script auf TS!
 		arcpy.ImportToolbox(r"K:\Anwend\Tools\ArcGIS10\DeltaChecker\DeltaChecker.tbx")
 		
 		arcpy.AddWarning("Eine Ebene ist hinzugekommen: " + newTableDict[key])
-		#~ arcpy.AddMessage("Vergleiche: " + newTableDict[key] + " vs. " + newTableDict[key]) 
+		# ~ arcpy.AddMessage("Vergleiche: " + newTableDict[key] + " vs. " + newTableDict[key]) 
 		result = arcpy.CheckLayer_deltachecker(newTableDict[key], newTableDict[key], outputDir)
 		arcpy.AddMessage(result.getOutput(0))
 		
 		outputFile = result.getOutput(0)
 		DOM = xml.dom.minidom.parse(outputFile)
 		cnt = DOM.getElementsByTagName("div")[1].toxml() + "<hr/>"
-		content = content + cnt.replace('<div id="dcContent">','<div id="dcContent" class="changed">')
+		content = content + cnt.replace('<div id="dcContent">', '<div id="dcContent" class="changed">')
 		
 		del DOM, result
-		#~ Nur wenn ImportToolbox und RemoveToolbox in der Schlaufe sind, laeuft das Script auf TS!
+		# ~ Nur wenn ImportToolbox und RemoveToolbox in der Schlaufe sind, laeuft das Script auf TS!
 		arcpy.RemoveToolbox(r"K:\Anwend\Tools\ArcGIS10\DeltaChecker\DeltaChecker.tbx")
 		os.remove(outputFile)
 
-	#~ gelöschte FeatureClasses vergleichen
+	# ~ gelöschte FeatureClasses vergleichen
 	for key in sorted(removedNames):
-		#~ Nur wenn ImportToolbox und RemoveToolbox in der Schlaufe sind, laeuft das Script auf TS!
+		# ~ Nur wenn ImportToolbox und RemoveToolbox in der Schlaufe sind, laeuft das Script auf TS!
 		arcpy.ImportToolbox(r"K:\Anwend\Tools\ArcGIS10\DeltaChecker\DeltaChecker.tbx")
 		
 		arcpy.AddWarning("Eine Ebene ist verschwunden: " + oldTableDict[key])
-		#~ arcpy.AddMessage("Vergleiche: " + oldTableDict[key] + " vs. " + oldTableDict[key]) 
+		# ~ arcpy.AddMessage("Vergleiche: " + oldTableDict[key] + " vs. " + oldTableDict[key]) 
 		result = arcpy.CheckLayer_deltachecker(oldTableDict[key], oldTableDict[key], outputDir)
 		arcpy.AddMessage(result.getOutput(0))
 		
 		outputFile = result.getOutput(0)
 		DOM = xml.dom.minidom.parse(outputFile)
 		cnt = DOM.getElementsByTagName("div")[1].toxml() + "<hr/>"
-		content = content + cnt.replace('<div id="dcContent">','<div id="dcContent" class="old">')
+		content = content + cnt.replace('<div id="dcContent">', '<div id="dcContent" class="old">')
 		
 		del DOM, result
-		#~ Nur wenn ImportToolbox und RemoveToolbox in der Schlaufe sind, laeuft das Script auf TS!
+		# ~ Nur wenn ImportToolbox und RemoveToolbox in der Schlaufe sind, laeuft das Script auf TS!
 		arcpy.RemoveToolbox(r"K:\Anwend\Tools\ArcGIS10\DeltaChecker\DeltaChecker.tbx")
 		os.remove(outputFile)
 	
-	geruestFilePath = os.path.join(scriptHome,"geruest_utf8.txt")
-	#~ geruestFile = open(geruestFilePath,"r")
-	geruestFile = codecs.open(geruestFilePath,"r","utf-8")
+	geruestFilePath = os.path.join(scriptHome, "geruest_utf8.txt")
+	# ~ geruestFile = open(geruestFilePath,"r")
+	geruestFile = codecs.open(geruestFilePath, "r", "utf-8")
 	geruest = geruestFile.read()
 	geruestFile.close()
 
-	#~ outputFile = open(outputFileName,"w")
-	outputFile = codecs.open(outputFileName,"w","utf-8")
-	outputFile.write(geruest.replace('<div id="dcContent"/>',content))
+	# ~ outputFile = open(outputFileName,"w")
+	outputFile = codecs.open(outputFileName, "w", "utf-8")
+	outputFile.write(geruest.replace('<div id="dcContent"/>', content))
 	outputFile.close()
 	
 except Exception as e:
