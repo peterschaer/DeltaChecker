@@ -116,7 +116,7 @@ try:
 	# Alle Output-Parameter ausgeben	
 	# Der generierte Output-Filename wird als Output-Parameter zurueckgegeben
 	arcpy.SetParameterAsText(8,outputFile)
-	DeltaStatus = True
+	DeltaStatus = t.hasDelta
 	arcpy.SetParameter(9,DeltaStatus)
 	resDict = {'sprefProps': t.sprefPropertiesAsDict,
 			'tblProps': t.tblPropertiesAsDict,

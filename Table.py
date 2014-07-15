@@ -20,7 +20,6 @@ class Table:
 		fieldNameList1 = self.__getFieldNameList(table1)
 		fieldNameList2 = self.__getFieldNameList(table2)
 		mergedFieldNames = self.__mergeFieldNameLists(fieldNameList1,fieldNameList2)
-		self.hasDelta = None
 
 		# Felder
 		for f in mergedFieldNames:
@@ -43,6 +42,9 @@ class Table:
 				po = Property.Property(arcpy.Describe(table1).spatialReference,arcpy.Describe(table2).spatialReference,k,v)
 				self.sprefProperties.append(po)
 				self.sprefPropertiesAsDict.append(po.results)
+
+# 		Prüfen, ob die Tabelle irgendwo ein Delta hat
+		self.hasDelta = self.__determineHasDelta()
 
 		self.tablePropertiesHTML = self.__getTablePropertiesHTML()
 		self.spatrefPropertiesHTML = self.__getSpatrefPropertiesHTML()
@@ -106,6 +108,22 @@ class Table:
 			if f not in list2:
 				result.append(f)
 		return result
+	
+	def __determineHasDelta(self):
+		delta = False
+# 		Loop durch alle Properties (Table uns SpatialReference) und alle Felder
+# 		Wenn irgendwo ein hasDelta auf True ist, dann gilt für die ganze Tabelle hasDelta=True
+		for tblProp in self.tblProperties:
+			if tblProp.hasDelta:
+				delta = True
+		for spProp in self.sprefProperties:
+			if spProp.hasDelta:
+				delta = True
+		for fld in self.fields:
+			if fld.hasDelta:
+				delta = True
+				
+		return delta
 	
 		
 	
