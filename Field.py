@@ -16,7 +16,6 @@ class Field:
 		self.name = fieldName
 		self.table1 = table1
 		self.table2 = table2
-# 		TODO: Der status ist nicht nur abhängig davon, ob es ein neues oder gelöschtes Feld ist, sondern auch ob sich irgendeine Eigenschaft des Feldes geändert hat
 		self.status = self.__determineStatus()
 		fieldObj1 = self.__getFieldObject(table1)
 		fieldObj2 = self.__getFieldObject(table2)
@@ -31,12 +30,17 @@ class Field:
 				p = Property.Property(fieldObj1,fieldObj2,pn,an)
 			self.properties.append(p)
 			self.propertiesAsDict.append(p.results)
+
+# 		TODO: Der status ist nicht nur abhängig davon, ob es ein neues oder gelöschtes Feld ist, sondern auch ob sich irgendeine Eigenschaft des Feldes geändert hat
+		self.hasDelta = self.__determineHasDelta()
 		
 		self.html = self.__createHTMLTableRow()
 		self.results = self.__getResultsDict__()
 
 	def __getResultsDict__(self):
 		d = {'name': self.name,
+			'hasDelta': self.hasDelta,
+			'status': self.status,
 			'properties': self.propertiesAsDict
 			}
 		return d		
@@ -84,6 +88,18 @@ class Field:
 			result = "added"
 		
 		return result
+	
+	def __determineHasDelta(self):
+		delta = False
+# 		Neue und gelöschte Felder haben per Abmachung hasDelta=False
+#		Es muss also nur in den stable-Feldern nach Deltas gesucht werden
+#		Ansonsten gilt immer delta=False
+		if self.status == 'stable':
+# 			Loop durch alle Properties (inkl. MinMax und CompareFields)
+			for p in self.properties:
+				if p.hasDelta == True:
+					delta = True
+		return delta
 	
 	def __getFieldNames(self,tbl):
 		names = []
