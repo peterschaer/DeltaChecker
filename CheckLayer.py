@@ -116,12 +116,14 @@ try:
 	# Alle Output-Parameter ausgeben	
 	# Der generierte Output-Filename wird als Output-Parameter zurueckgegeben
 	arcpy.SetParameterAsText(8,outputFile)
-	DeltaStatus = t.hasDelta
-	arcpy.SetParameter(9,DeltaStatus)
-	resDict = {'sprefProps': t.sprefPropertiesAsDict,
+	arcpy.SetParameter(9,unicode(t.hasDelta))
+	resDict = {'name': getTableName(newTable),
+			'hasDelta': t.hasDelta,
+			'status': 'stable',
+			'sprefProps': t.sprefPropertiesAsDict,
 			'tblProps': t.tblPropertiesAsDict,
 			'fields': t.fieldsAsDict}
-	arcpy.SetParameter(10,json.dumps(resDict))
+	arcpy.SetParameterAsText(10,json.dumps(resDict))
 
 
 except Exception as e:

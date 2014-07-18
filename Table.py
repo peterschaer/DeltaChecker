@@ -119,9 +119,13 @@ class Table:
 		for spProp in self.sprefProperties:
 			if spProp.hasDelta:
 				delta = True
+# 		Sobald es ein neues oder ein gelöschtes Feld gibt, dann gilt für die ganze Tabelle hasDelta=True 
 		for fld in self.fields:
-			if fld.hasDelta:
+			if fld.status in ("added","removed"):
 				delta = True
+			elif fld.status == "stable":
+				if fld.hasDelta:
+					delta = True
 				
 		return delta
 	
