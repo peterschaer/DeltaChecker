@@ -13,7 +13,7 @@ class CompareValueProperty:
 		self.name = "values"
 		self.alias = "Werte"
 		self.order = None
-
+		
 		self.oldValues = self.__getValues(oldTable)
 		self.newValues = self.__getValues(newTable)
 		

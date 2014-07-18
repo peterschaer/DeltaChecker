@@ -62,7 +62,15 @@ try:
 # 		newTableDict[key] ist der vollständige Pfad zur Featureclass (inkl. SDE-File und Schema-Name)
 # 		Legendenrelevante Felder (aus INFO-Tabellen) sollen einem Wertevergleich unterzogen werden
 		legendFields = getLegendFieldsFromINFOTables(key)
-		arcpy.AddMessage("Vergleiche: " + oldTableDict[key] + " vs. " + newTableDict[key]) 
+		arcpy.AddMessage("Vergleiche: " + oldTableDict[key] + " vs. " + newTableDict[key])
+# 		TODO: Abfangen wenn legendenrelevantes Feld nicht in beiden Tabellen existiert
+# 		Problem: im Tool (CheckLayer) ist der Parameter Wertevergleich-Felder in Abhängigkeit zur neuen Tabelle definiert.
+# 		Wenn das Feld in dieser Tabelle nicht existiert, gibt es bereits hier beim Aufruf einen Fehler. Das Tool prüft zwar
+# 		selber schon, ob ein solches Feld in beiden Tabellen vorkommt, aber dies geschieht erst später. Der Fehler kommt hier von
+# 		der Validierungsfunktion des GP-Tools.
+# 		Lösung 1: hier schon prüfen, ob diese Felder in beiden Featureclasses existieren
+# 		Lösung 2: in der Dropdownliste in CheckLayer nur Felder einblenden, die in beiden FCs existieren. Dies über das Validierungsscript
+# 		realisieren und nicht über die Dependency im GUI.
 		result = arcpy.CheckLayer_deltachecker(oldTableDict[key], newTableDict[key], outputDir, "#", "#", "#", "#", legendFields)
 
 # 		Prüfen ob die FeatureClass ein Delta aufweist

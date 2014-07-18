@@ -21,7 +21,6 @@ class Field:
 		fieldObj2 = self.__getFieldObject(table2)
 		
 		for pn, an in fieldProps.items():
-			print "Bearbeite Feld-Property " + pn
 			if pn in ("min","max") and self.status == "stable" and self.name in minMaxFields:
 				p = MinMaxProperty.MinMaxProperty(self.table1, self.table2, self.name,pn)
 			elif pn in ("values") and self.status == "stable" and self.name in compareValueFields:
