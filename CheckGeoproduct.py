@@ -15,7 +15,15 @@ try:
 			base = os.path.basename(fc).split(".")[1]
 			fcDict[base] = fc
 		return fcDict
-		
+	
+	def getLegendFieldsFromINFOTables(fc):
+		fields = '#' #Initial-Wert (= kein Feld bzw. leer)
+# 		TODO: Zugriff auf GDBP (User GDBV) und legendenrelevante Felder der FC aus den INFO-Tabellen holen
+		arcpy.AddMessage("Für diese FC werden legendenrelevante Felder geholt: " + str(fc))
+		if fc == 'KLEK_WDWCHS':
+			fields = 'OBJNR'
+		return fields
+	
 	scriptHome = r"\\geodb.infra.be.ch\freigabe\Anwendungen\DeltaChecker\v10.0.0"
 	ws = os.path.join(scriptHome, "geodb.sde")
 
@@ -50,9 +58,12 @@ try:
 		# ~ Nur wenn ImportToolbox und RemoveToolbox in der Schlaufe sind, laeuft das Script auf TS!
 		arcpy.ImportToolbox(os.path.join(scriptPath, "DeltaChecker.tbx"))
 		
-# 		TODO: In den INFO-Tabellen nach legenden- und systemrelevanten Attributen suchen. Diese werden entweder  als CompareValueField oder als MinMaxField übergeben
+# 		key ist der Featureclass-Name ohne SDE-File und ohne Schema-Nameq
+# 		newTableDict[key] ist der vollständige Pfad zur Featureclass (inkl. SDE-File und Schema-Name)
+# 		Legendenrelevante Felder (aus INFO-Tabellen) sollen einem Wertevergleich unterzogen werden
+		legendFields = getLegendFieldsFromINFOTables(key)
 		arcpy.AddMessage("Vergleiche: " + oldTableDict[key] + " vs. " + newTableDict[key]) 
-		result = arcpy.CheckLayer_deltachecker(oldTableDict[key], newTableDict[key], outputDir)
+		result = arcpy.CheckLayer_deltachecker(oldTableDict[key], newTableDict[key], outputDir, "#", "#", "#", "#", legendFields)
 
 # 		Prüfen ob die FeatureClass ein Delta aufweist
 		outputFile = result.getOutput(0)
